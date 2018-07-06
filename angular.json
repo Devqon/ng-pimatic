@@ -116,6 +116,46 @@
           }
         }
       }
+    },
+    "ng-pimatic": {
+      "root": "projects/ng-pimatic",
+      "sourceRoot": "projects/ng-pimatic/src",
+      "projectType": "library",
+      "prefix": "ngx",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/ng-pimatic/tsconfig.lib.json",
+            "project": "projects/ng-pimatic/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "project": "projects/ng-pimatic/ng-package.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ng-pimatic/src/test.ts",
+            "tsConfig": "projects/ng-pimatic/tsconfig.spec.json",
+            "karmaConfig": "projects/ng-pimatic/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ng-pimatic/tsconfig.lib.json",
+              "projects/ng-pimatic/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "ng-pimatic-app"
