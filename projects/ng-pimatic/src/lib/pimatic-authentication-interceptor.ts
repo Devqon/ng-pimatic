@@ -5,7 +5,7 @@ import {
   HttpHandler,
   HttpRequest
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { Inject } from '@angular/core';
 
 export class PimaticAuthenticationInterceptor implements HttpInterceptor {

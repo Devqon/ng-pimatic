@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { PIMATIC_CONFIG, Config } from './config';
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -16,9 +16,7 @@ import {
   IVariable
 } from './models';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class PimaticService {
 
   private pimaticUrl = 'http://demo.pimatic.org/api';
