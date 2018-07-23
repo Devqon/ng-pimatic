@@ -1,3 +1,7 @@
+export interface IResponse {
+  success: boolean;
+}
+
 export interface IConfig {
 
 }
