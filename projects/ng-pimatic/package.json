@@ -1,13 +1,13 @@
 {
   "name": "ng5-pimatic",
-  "version": "0.0.6",
+  "version": "0.0.7-alpha",
   "homepage": "https://github.com/Devqon/ng-pimatic",
   "peerDependencies": {
     "@angular/common": "^5.2.0",
     "@angular/core": "^5.2.0",
-    "rxjs": "^5.5.11"
+    "rxjs": "^5.5.11",
+    "ngx-socket-io": "1.0.8"
   },
   "dependencies": {
-    "ngx-socket-io": "^1.1.1"
   }
 }

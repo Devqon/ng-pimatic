@@ -1,17 +1,31 @@
+import { PimaticIo } from './pimatic.io';
 import { PimaticService } from './pimatic.service';
 import { PimaticAuthenticationInterceptor } from './pimatic-authentication-interceptor';
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { Config, PIMATIC_CONFIG } from './config';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { SocketIoModule } from 'ngx-socket-io';
+
+export function pimaticIoFactory(pimatic: PimaticService) {
+  return new PimaticIo(pimatic.config);
+}
 
 @NgModule({
   imports: [
-    HttpClientModule
+    HttpClientModule,
+    SocketIoModule
   ],
   declarations: [],
   exports: [
   ],
-  providers: [PimaticService]
+  providers: [
+    PimaticService,
+    {
+      provide: PimaticIo,
+      useFactory: pimaticIoFactory,
+      deps: [PimaticService]
+    }
+  ]
 })
 export class PimaticModule {
   static forRoot(config: Config): ModuleWithProviders {
