@@ -1,4 +1,4 @@
-import { PIMATIC_CONFIG, Config } from './config';
+import { PimaticService } from './pimatic.service';
 import {
   HttpEvent,
   HttpInterceptor,
@@ -6,11 +6,12 @@ import {
   HttpRequest
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 
+@Injectable()
 export class PimaticAuthenticationInterceptor implements HttpInterceptor {
 
-  constructor(@Inject(PIMATIC_CONFIG) private config: Config) {
+  constructor(private pimatic: PimaticService) {
   }
 
   intercept(
@@ -19,7 +20,7 @@ export class PimaticAuthenticationInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     // Clone the request to add the new header
     const clonedRequest = req.clone({
-      headers: req.headers.set('Authorization', `Basic ${btoa(this.config.user + ':' + this.config.password)}`)
+      headers: req.headers.set('Authorization', `Basic ${btoa(this.pimatic.config.user + ':' + this.pimatic.config.password)}`)
     });
 
     // Pass the cloned request instead of the original request to the next handle
