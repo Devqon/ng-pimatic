@@ -18,11 +18,38 @@ import {
 
 @Injectable()
 export class PimaticService {
-
   private pimaticUrl = 'http://demo.pimatic.org/api';
 
-  constructor(@Inject(PIMATIC_CONFIG) config: Config, private http: HttpClient) {
-    this.pimaticUrl = `${config.url}/api`;
+  config: Config;
+
+  constructor(
+    @Inject(PIMATIC_CONFIG) config: Config,
+    private http: HttpClient
+  ) {
+    this.updateApiConfig(config);
+  }
+
+  updateApiConfig(config: Config) {
+    if (!this.config) {
+      this.config = config;
+    } else {
+      Object.assign(this.config, config);
+    }
+    this.pimaticUrl = `${this.config.url}/api`;
+  }
+
+  // falback for non-implemented functions
+  get<T>(endpoint: string) {
+    return this.http.get<T>(`${this.pimaticUrl}/${endpoint}`);
+  }
+  post<T>(endpoint: string, data) {
+    return this.http.post<T>(`${this.pimaticUrl}/${endpoint}`, data);
+  }
+  put<T>(endpoint: string, data) {
+    return this.http.put<T>(`${this.pimaticUrl}/${endpoint}`, data);
+  }
+  delete<T>(endpoint: string) {
+    return this.http.delete<T>(`${this.pimaticUrl}/${endpoint}`);
   }
 
   restart() {
