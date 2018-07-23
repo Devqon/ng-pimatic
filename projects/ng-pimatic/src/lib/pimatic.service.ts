@@ -1,4 +1,5 @@
 import { Observable } from 'rxjs/Observable';
+import { map } from 'rxjs/operators';
 import { PIMATIC_CONFIG, Config } from './config';
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -60,11 +61,15 @@ export class PimaticService {
    * Config
    */
   getConfig(password?: string) {
-    return this.http.get<IConfig>(`${this.pimaticUrl}/config?password=${password}`);
+    return this.http
+      .get<{ config: IConfig }>(
+        `${this.pimaticUrl}/config?password=${password}`
+      )
+      .pipe(map(res => res.config));
   }
 
   updateConfig(config) {
-    return this.http.post<void>(`${this.pimaticUrl}/config`, config);
+    return this.http.post(`${this.pimaticUrl}/config`, config);
   }
 
   /**
@@ -90,7 +95,9 @@ export class PimaticService {
   }
 
   getRules() {
-    return this.http.get<IRule[]>(`${this.pimaticUrl}/rules`);
+    return this.http
+      .get<{ rules: IRule[] }>(`${this.pimaticUrl}/rules`)
+      .pipe(map(res => res.rules));
   }
 
   getRuleById(ruleId: string) {
@@ -98,67 +105,109 @@ export class PimaticService {
   }
 
   getRuleActionsHints(actionsInput: string) {
-    return this.http.post<IActionHints>(`${this.pimaticUrl}/rules-parser/get-action-hints`, {
-      actionsInput
-    });
+    return this.http
+      .post<{ actionHints: IActionHints }>(
+        `${this.pimaticUrl}/rules-parser/get-action-hints`,
+        {
+          actionsInput
+        }
+      )
+      .pipe(map(res => res.actionHints));
   }
 
   getRuleConditionHints(conditionInput: string) {
-    return this.http.post<IConditionHints>(`${this.pimaticUrl}/rules-parser/get-condition-hints`, {
-      conditionInput
-    });
+    return this.http
+      .post<{ conditionHints: IConditionHints }>(
+        `${this.pimaticUrl}/rules-parser/get-condition-hints`,
+        {
+          conditionInput
+        }
+      )
+      .pipe(map(res => res.conditionHints));
   }
 
   getPredicatePresets() {
-    return this.http.get<IPreset[]>(`${this.pimaticUrl}/rules-parser/get-predicate-presets`);
+    return this.http
+      .get<{ presets: IPreset[] }>(
+        `${this.pimaticUrl}/rules-parser/get-predicate-presets`
+      )
+      .pipe(map(res => res.presets));
   }
 
   getPredicateInfo(input: string, predicateProviderClass?: string) {
     // tslint:disable-next-line:max-line-length
-    return this.http.get<IPredicate[]>(`${this.pimaticUrl}/rules-parser/get-predicate-info?input=${input}&predicateProviderClass=${predicateProviderClass}`);
+    return this.http
+      .get<{ predicates: IPredicate[] }>(
+        `${
+          this.pimaticUrl
+        }/rules-parser/get-predicate-info?input=${input}&predicateProviderClass=${predicateProviderClass}`
+      )
+      .pipe(map(res => res.predicates));
   }
 
   executeAction(actionString: string, simulate?: boolean, logging?: string) {
-    return this.http.post<string>(`${this.pimaticUrl}/execute-action`, {
-      actionString,
-      simulate,
-      logging
-    });
+    return this.http
+      .post<{ message: string }>(`${this.pimaticUrl}/execute-action`, {
+        actionString,
+        simulate,
+        logging
+      })
+      .pipe(map(res => res.message));
   }
 
   updateRuleOrder(ruleOrder: IRule[]) {
-    return this.http.post<IRule[]>(`${this.pimaticUrl}/rules`, {
-      ruleOrder
-    });
+    return this.http
+      .post<{ rules: IRule[] }>(`${this.pimaticUrl}/rules`, {
+        ruleOrder
+      })
+      .pipe(map(res => res.rules));
   }
 
   /**
    * Variables
    */
   getVariables() {
-    return this.http.get<IVariable[]>(`${this.pimaticUrl}/variables`);
+    return this.http
+      .get<{ variables: IVariable[] }>(`${this.pimaticUrl}/variables`)
+      .pipe(map(res => res.variables));
   }
 
-  updateVariable(name: string, type: string, valueOrExpression: string, unit?: string) {
-    return this.http.patch<IVariable>(`${this.pimaticUrl}/variables/${name}`, {
-      name,
-      type,
-      valueOrExpression,
-      unit
-    });
+  updateVariable(
+    name: string,
+    type: string,
+    valueOrExpression: string,
+    unit?: string
+  ) {
+    return this.http
+      .patch<{ variable: IVariable }>(`${this.pimaticUrl}/variables/${name}`, {
+        name,
+        type,
+        valueOrExpression,
+        unit
+      })
+      .pipe(map(res => res.variable));
   }
 
-  addVariable(name: string, type: string, valueOrExpression: string, unit?: string) {
-    return this.http.post<IVariable>(`${this.pimaticUrl}/variables/${name}`, {
-      name,
-      type,
-      valueOrExpression,
-      unit
-    });
+  addVariable(
+    name: string,
+    type: string,
+    valueOrExpression: string,
+    unit?: string
+  ) {
+    return this.http
+      .post<{ variable: IVariable }>(`${this.pimaticUrl}/variables/${name}`, {
+        name,
+        type,
+        valueOrExpression,
+        unit
+      })
+      .pipe(map(res => res.variable));
   }
 
   getVariableByName(name: string) {
-    return this.http.get<IVariable>(`${this.pimaticUrl}/variables/${name}`);
+    return this.http
+      .get<{ variable: IVariable }>(`${this.pimaticUrl}/variables/${name}`)
+      .pipe(map(res => res.variable));
   }
   // TODO: more variable functions
 
@@ -166,11 +215,15 @@ export class PimaticService {
    * Devices
    */
   getDevices() {
-    return this.http.get<IDevice[]>(`${this.pimaticUrl}/devices`);
+    return this.http
+      .get<{ devices: IDevice[] }>(`${this.pimaticUrl}/devices`)
+      .pipe(map(res => res.devices));
   }
   // TODO: more device functions
   callDeviceAction(deviceId: string, actionName: string) {
-    return this.http.get<void>(`${this.pimaticUrl}/device/${deviceId}/${actionName}`);
+    return this.http.get<void>(
+      `${this.pimaticUrl}/device/${deviceId}/${actionName}`
+    );
   }
 
   // TODO: group functions
@@ -178,11 +231,23 @@ export class PimaticService {
    * Groups
    */
 
+  // TODO: page functions
+  /**
+   * Pages
+   */
+  getPages() {
+    return this.http
+      .get<{ pages: any[] }>(`${this.pimaticUrl}/pages`)
+      .pipe(map(res => res.pages));
+  }
+
   /**
    * Plugins
    */
   getInstalledPluginsWithInfo() {
-    return this.http.get<IPlugin[]>(`${this.pimaticUrl}/plugins`);
+    return this.http
+      .get<{ plugins: IPlugin[] }>(`${this.pimaticUrl}/plugins`)
+      .pipe(map(res => res.plugins));
   }
 
   /**
@@ -192,8 +257,10 @@ export class PimaticService {
     const params = new HttpParams({
       fromObject: criteria as any
     });
-    return this.http.get<IMessage>(`${this.pimaticUrl}/database/messages`, {
-      params: params
-    });
+    return this.http
+      .get<{ messages: IMessage[] }>(`${this.pimaticUrl}/database/messages`, {
+        params: params
+      })
+      .pipe(map(res => res.messages));
   }
 }
