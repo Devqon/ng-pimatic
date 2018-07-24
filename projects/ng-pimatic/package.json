@@ -1,6 +1,6 @@
 {
   "name": "ng5-pimatic",
-  "version": "0.0.7-alpha",
+  "version": "0.0.8",
   "homepage": "https://github.com/Devqon/ng-pimatic",
   "peerDependencies": {
     "@angular/common": "^5.2.0",
