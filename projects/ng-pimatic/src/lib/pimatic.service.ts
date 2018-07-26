@@ -46,6 +46,9 @@ export class PimaticService {
   post<T>(endpoint: string, data) {
     return this.http.post<T>(`${this.pimaticUrl}/${endpoint}`, data);
   }
+  patch<T>(endpoint: string, data) {
+    return this.http.patch<T>(`${this.pimaticUrl}/${endpoint}`, data);
+  }
   put<T>(endpoint: string, data) {
     return this.http.put<T>(`${this.pimaticUrl}/${endpoint}`, data);
   }
@@ -55,6 +58,12 @@ export class PimaticService {
 
   restart() {
     return this.http.post<any>(`${this.pimaticUrl}/restart`, null);
+  }
+
+  doesRequireRestart() {
+    return this.http
+      .get<{ restartRequired: boolean }>(`${this.pimaticUrl}/restart-required`)
+      .pipe(map(res => res.restartRequired));
   }
 
   /**
@@ -247,6 +256,12 @@ export class PimaticService {
   getInstalledPluginsWithInfo() {
     return this.http
       .get<{ plugins: IPlugin[] }>(`${this.pimaticUrl}/plugins`)
+      .pipe(map(res => res.plugins));
+  }
+
+  searchForPluginsWithInfo() {
+    return this.http
+      .get<{ plugins: IPlugin[] }>(`${this.pimaticUrl}/available-plugins`)
       .pipe(map(res => res.plugins));
   }
 
