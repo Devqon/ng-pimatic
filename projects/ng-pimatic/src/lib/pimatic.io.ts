@@ -2,7 +2,7 @@ import { Socket } from 'ngx-socket-io';
 import { Config } from './config';
 import { Injectable } from '@angular/core';
 import { IRule, IVariable } from './models';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class PimaticIo extends Socket {
